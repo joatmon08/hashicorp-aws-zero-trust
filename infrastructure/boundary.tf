@@ -7,6 +7,6 @@ module "boundary" {
   private_subnet_ids   = module.vpc.database_subnets
   name                 = "boundary-${var.name}"
   key_pair_name        = var.key_pair_name
-  client_cidr_block    = var.client_cidr_block
+  allow_cidr_blocks    = [var.client_cidr_block]
   boundary_db_password = var.boundary_database_password
 }
