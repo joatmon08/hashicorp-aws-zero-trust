@@ -1,6 +1,19 @@
 output "region" {
   value = local.region
 }
+
+output "vpc_id" {
+  value = module.vpc.vpc_id
+}
+
+output "private_subnets" {
+  value = module.vpc.private_subnets
+}
+
+output "public_subnets" {
+  value = module.vpc.public_subnets
+}
+
 output "boundary_endpoint" {
   value = "http://${module.boundary.boundary_lb}:9200"
 }
@@ -26,10 +39,15 @@ output "ecs_cluster" {
   value = aws_ecs_cluster.cluster.name
 }
 
+output "ecs_security_group" {
+  value = aws_security_group.ecs.id
+}
+
 output "consul_attributes" {
   sensitive = true
 
   value = {
+    datacenter                     = data.hcp_consul_cluster.cluster.datacenter
     acl_secret_name_prefix         = var.name
     consul_server_ca_cert_arn      = aws_secretsmanager_secret.consul_ca_cert.arn
     gossip_key_secret_arn          = aws_secretsmanager_secret.gossip_key.arn
