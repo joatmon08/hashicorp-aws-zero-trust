@@ -62,14 +62,14 @@ resource "aws_ecs_service" "product_api" {
 }
 
 module "product_api" {
-  source                        = "hashicorp/consul-ecs/aws//modules/mesh-task"
-  version                       = "0.2.0-beta2"
-  tags                          = merge(local.tags, { Service = "product-api" })
-  requires_compatibilities      = ["EC2"]
-  family                        = "${var.name}-product-api"
-  port                          = "9090"
-  log_configuration             = local.product_log_config
-  additional_task_role_policies = [aws_iam_policy.database.arn]
+  source                             = "hashicorp/consul-ecs/aws//modules/mesh-task"
+  version                            = "0.2.0-beta2"
+  tags                               = merge(local.tags, { Service = "product-api" })
+  requires_compatibilities           = ["EC2"]
+  family                             = "${var.name}-product-api"
+  port                               = "9090"
+  log_configuration                  = local.product_log_config
+  additional_execution_role_policies = [aws_iam_policy.database.arn]
   container_definitions = [{
     name             = "product-api"
     image            = "joatmon08/product-api:v0.0.18"
