@@ -25,3 +25,15 @@ output "product_database_password" {
 output "ecs_cluster" {
   value = aws_ecs_cluster.cluster.name
 }
+
+output "consul_attributes" {
+  sensitive = true
+
+  value = {
+    acl_secret_name_prefix         = var.name
+    consul_server_ca_cert_arn      = aws_secretsmanager_secret.consul_ca_cert.arn
+    gossip_key_secret_arn          = aws_secretsmanager_secret.gossip_key.arn
+    consul_client_token_secret_arn = module.consul_acl_controller.client_token_secret_arn
+    consul_retry_join              = jsondecode(base64decode(data.hcp_consul_cluster.cluster.consul_config_file))["retry_join"][0]
+  }
+}
