@@ -1,8 +1,3 @@
-data "aws_security_group" "default" {
-  name   = "default"
-  vpc_id = local.vpc_id
-}
-
 resource "aws_security_group" "example_client_app_alb" {
   name   = "${var.name}-example-client-app-alb"
   vpc_id = local.vpc_id
@@ -29,7 +24,7 @@ resource "aws_security_group_rule" "ingress_from_client_alb_to_ecs" {
   to_port                  = 65535
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.example_client_app_alb.id
-  security_group_id        = data.aws_security_group.default.id
+  security_group_id        = local.ecs_security_group
 }
 
 resource "aws_lb" "example_client_app" {
