@@ -28,11 +28,13 @@ locals {
 }
 
 module "example_client_app" {
-  source            = "github.com/hashicorp/terraform-aws-consul-ecs//modules/mesh-task"
-  tags              = local.tags
-  family            = "${var.name}-example-client-app"
-  port              = "9090"
-  log_configuration = local.example_client_app_log_config
+  source                   = "hashicorp/consul-ecs/aws//modules/mesh-task"
+  version                  = "0.2.0-beta2"
+  tags                     = local.tags
+  requires_compatibilities = ["FARGATE"]
+  family                   = "${var.name}-example-client-app"
+  port                     = "9090"
+  log_configuration        = local.example_client_app_log_config
   container_definitions = [{
     name             = "example-client-app"
     image            = "ghcr.io/lkysow/fake-service:v0.21.0"
@@ -67,7 +69,6 @@ module "example_client_app" {
   ]
   retry_join                     = local.consul_attributes.consul_retry_join
   tls                            = true
-  consul_datacenter              = local.consul_attributes.datacenter
   consul_server_ca_cert_arn      = local.consul_attributes.consul_server_ca_cert_arn
   gossip_key_secret_arn          = local.consul_attributes.gossip_key_secret_arn
   acls                           = true
@@ -76,11 +77,13 @@ module "example_client_app" {
 }
 
 module "example_server_app" {
-  source            = "github.com/hashicorp/terraform-aws-consul-ecs//modules/mesh-task"
-  tags              = local.tags
-  family            = "${var.name}-example-server-app"
-  port              = "9090"
-  log_configuration = local.example_server_app_log_config
+  source                   = "hashicorp/consul-ecs/aws//modules/mesh-task"
+  version                  = "0.2.0-beta2"
+  tags                     = local.tags
+  requires_compatibilities = ["EC2"]
+  family                   = "${var.name}-example-server-app"
+  port                     = "9090"
+  log_configuration        = local.example_server_app_log_config
   container_definitions = [{
     name             = "example-server-app"
     image            = "ghcr.io/lkysow/fake-service:v0.21.0"
@@ -95,7 +98,6 @@ module "example_server_app" {
   }]
   retry_join                     = local.consul_attributes.consul_retry_join
   tls                            = true
-  consul_datacenter              = local.consul_attributes.datacenter
   consul_server_ca_cert_arn      = local.consul_attributes.consul_server_ca_cert_arn
   gossip_key_secret_arn          = local.consul_attributes.gossip_key_secret_arn
   acls                           = true

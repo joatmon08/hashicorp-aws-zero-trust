@@ -31,7 +31,7 @@ resource "aws_ecs_service" "example_server_app" {
     subnets         = local.private_subnets
     security_groups = [local.ecs_security_group]
   }
-  launch_type            = "FARGATE"
+  launch_type            = "EC2"
   propagate_tags         = "TASK_DEFINITION"
   enable_execute_command = true
 }
