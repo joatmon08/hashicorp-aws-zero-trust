@@ -9,6 +9,7 @@ resource "hcp_consul_cluster" "consul" {
   hvn_id          = hcp_hvn.hvn.hvn_id
   cluster_id      = var.name
   tier            = "development"
+  datacenter      = "dc1"
   public_endpoint = true
 }
 

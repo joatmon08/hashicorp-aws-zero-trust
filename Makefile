@@ -25,3 +25,7 @@ postgres-operations: boundary-auth-ops
 postgres-products: boundary-auth-dev
 	boundary connect postgres -username=postgres -target-id \
 		$(shell cd boundary && terraform output -raw boundary_target_postgres) -- -d products
+
+configure-db: boundary-auth-dev
+	boundary connect postgres -username=postgres -target-id \
+		$(shell cd boundary-configuration && terraform output -raw boundary_target_postgres) -- -d products -f database/products.sql
