@@ -43,15 +43,15 @@ output "ecs_security_group" {
   value = aws_security_group.ecs.id
 }
 
-# output "consul_attributes" {
-#   sensitive = true
+output "consul_attributes" {
+  sensitive = true
 
-#   value = {
-#     datacenter                     = data.hcp_consul_cluster.cluster.datacenter
-#     acl_secret_name_prefix         = var.name
-#     consul_server_ca_cert_arn      = aws_secretsmanager_secret.consul_ca_cert.arn
-#     gossip_key_secret_arn          = aws_secretsmanager_secret.gossip_key.arn
-#     consul_client_token_secret_arn = module.consul_acl_controller.client_token_secret_arn
-#     consul_retry_join              = jsondecode(base64decode(data.hcp_consul_cluster.cluster.consul_config_file))["retry_join"][0]
-#   }
-# }
+  value = {
+    datacenter                     = data.hcp_consul_cluster.cluster.datacenter
+    acl_secret_name_prefix         = local.acl_controller_prefix
+    consul_server_ca_cert_arn      = aws_secretsmanager_secret.consul_ca_cert.arn
+    gossip_key_secret_arn          = aws_secretsmanager_secret.gossip_key.arn
+    consul_client_token_secret_arn = module.consul_acl_controller.client_token_secret_arn
+    consul_retry_join              = jsondecode(base64decode(data.hcp_consul_cluster.cluster.consul_config_file))["retry_join"][0]
+  }
+}
