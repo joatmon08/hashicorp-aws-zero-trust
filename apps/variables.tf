@@ -20,7 +20,7 @@ variable "purpose" {
 }
 
 variable "client_cidr_block" {
-  type        = list(string)
+  type        = string
   description = "Client CIDR blocks to allow access to EC2 instances"
 }
 
