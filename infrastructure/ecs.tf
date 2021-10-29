@@ -23,6 +23,16 @@ resource "aws_security_group_rule" "https_client" {
   description              = "Allow all TCP traffic between ECS container instances"
 }
 
+resource "aws_security_group_rule" "boundary_ssh" {
+  type                     = "ingress"
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
+  source_security_group_id = module.boundary.boundary_security_group
+  security_group_id        = aws_security_group.ecs.id
+  description              = "Allow SSH from Boundary workers to ECS container instances"
+}
+
 resource "aws_kms_key" "ecs" {
   description             = "${var.name}-ecs"
   deletion_window_in_days = 7
