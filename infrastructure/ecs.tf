@@ -82,6 +82,7 @@ module "asg" {
   create_lc = true
   lc_name   = var.name
 
+  key_name                  = var.key_pair_name
   image_id                  = data.aws_ami.amazon_linux_ecs.id
   instance_type             = "t2.micro"
   security_groups           = [aws_security_group.ecs.id]
@@ -102,7 +103,6 @@ module "asg" {
       key                 = "Cluster"
       value               = var.name
       propagate_at_launch = true
-    },
-    local.tags
+    }
   ]
 }

@@ -33,6 +33,7 @@ resource "boundary_account" "operations_user_acct" {
   name           = each.key
   description    = "User account for ${each.key}"
   type           = "password"
+  login_name     = lower(each.key)
   password       = random_password.operations_team.result
   auth_method_id = boundary_auth_method.password.id
 }
@@ -48,6 +49,7 @@ resource "boundary_account" "products_user_acct" {
   name           = each.key
   description    = "User account for ${each.key}"
   type           = "password"
+  login_name     = lower(each.key)
   password       = random_password.products_team.result
   auth_method_id = boundary_auth_method.password.id
 }
@@ -63,6 +65,7 @@ resource "boundary_account" "security_user_acct" {
   name           = each.key
   description    = "User account for ${each.key}"
   type           = "password"
+  login_name     = lower(each.key)
   password       = random_password.security_team.result
   auth_method_id = boundary_auth_method.password.id
 }
