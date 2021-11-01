@@ -24,6 +24,16 @@ variable "client_cidr_block" {
   description = "Client CIDR blocks to allow access to EC2 instances"
 }
 
+variable "db_username" {
+  type        = string
+  description = "Database username for products information"
+}
+
+variable "db_password" {
+  type        = string
+  description = "Database password for products information"
+  sensitive   = true
+}
 
 locals {
 
@@ -39,6 +49,6 @@ locals {
   private_subnets    = data.terraform_remote_state.infrastructure.outputs.private_subnets
   public_subnets     = data.terraform_remote_state.infrastructure.outputs.public_subnets
   db_address         = data.terraform_remote_state.infrastructure.outputs.product_database_address
-  db_username        = data.terraform_remote_state.infrastructure.outputs.product_database_username
-  db_password        = data.terraform_remote_state.infrastructure.outputs.product_database_password
+  db_username        = var.db_username
+  db_password        = var.db_password
 }
