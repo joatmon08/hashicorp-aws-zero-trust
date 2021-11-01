@@ -19,7 +19,7 @@ resource "aws_ecs_service" "public_api" {
     subnets         = local.private_subnets
     security_groups = [local.ecs_security_group]
   }
-  launch_type            = "EC2"
+  launch_type            = "FARGATE"
   propagate_tags         = "TASK_DEFINITION"
   enable_execute_command = true
 }
@@ -28,7 +28,7 @@ module "public_api" {
   source                   = "hashicorp/consul-ecs/aws//modules/mesh-task"
   version                  = "0.2.0-beta2"
   tags                     = merge(local.tags, { Service = "public-api" })
-  requires_compatibilities = ["EC2"]
+  requires_compatibilities = ["FARGATE"]
   family                   = local.public_api_name
   port                     = "8080"
   log_configuration        = local.public_log_config
