@@ -1,4 +1,4 @@
-data "terraform_remote_state" "infrastructure" {
+data "terraform_remote_state" "hcp" {
   backend = "remote"
 
   config = {
@@ -18,8 +18,8 @@ resource "hcp_consul_cluster_root_token" "cluster" {
 }
 
 locals {
-  consul_cluster_id = data.terraform_remote_state.infrastructure.outputs.hcp_consul_id
-  consul_addr       = data.terraform_remote_state.infrastructure.outputs.hcp_consul_public_endpoint
+  consul_cluster_id = data.terraform_remote_state.hcp.outputs.hcp_consul_id
+  consul_addr       = data.terraform_remote_state.hcp.outputs.hcp_consul_public_endpoint
   consul_datacenter = data.hcp_consul_cluster.cluster.datacenter
   consul_token      = hcp_consul_cluster_root_token.cluster.secret_id
 }
