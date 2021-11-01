@@ -19,7 +19,7 @@ resource "aws_ecs_service" "frontend" {
     subnets         = local.private_subnets
     security_groups = [local.ecs_security_group]
   }
-  launch_type    = "FARGATE"
+  launch_type    = "EC2"
   propagate_tags = "TASK_DEFINITION"
   load_balancer {
     target_group_arn = aws_lb_target_group.frontend.arn
@@ -33,7 +33,7 @@ module "frontend" {
   source                   = "hashicorp/consul-ecs/aws//modules/mesh-task"
   version                  = "0.2.0-beta2"
   tags                     = merge(local.tags, { Service = "frontend" })
-  requires_compatibilities = ["FARGATE"]
+  requires_compatibilities = ["EC2"]
   family                   = local.frontend_name
   port                     = "80"
   log_configuration        = local.frontend_log_config
