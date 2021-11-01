@@ -3,9 +3,9 @@ resource "aws_security_group" "alb" {
   vpc_id = local.vpc_id
 
   ingress {
-    description = "Access to example client application."
-    from_port   = 9090
-    to_port     = 9090
+    description = "Allow access to frontend application"
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = [var.client_cidr_block]
   }
@@ -37,7 +37,7 @@ resource "aws_lb" "alb" {
 
 resource "aws_lb_target_group" "frontend" {
   name                 = "${var.name}-frontend"
-  port                 = 9090
+  port                 = 80
   protocol             = "HTTP"
   vpc_id               = local.vpc_id
   target_type          = "ip"
