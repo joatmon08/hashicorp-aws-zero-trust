@@ -7,6 +7,7 @@ locals {
       awslogs-stream-prefix = "product"
     }
   }
+  product_api_name = "${var.name}-product-api"
 }
 
 resource "aws_secretsmanager_secret" "database" {
@@ -43,7 +44,7 @@ EOF
 }
 
 resource "aws_ecs_service" "product_api" {
-  name            = "${var.name}-product-api"
+  name            = local.product_api_name
   cluster         = local.ecs_cluster_name
   task_definition = module.product_api.task_definition_arn
   desired_count   = 1
@@ -51,13 +52,8 @@ resource "aws_ecs_service" "product_api" {
     subnets         = local.private_subnets
     security_groups = [local.ecs_security_group]
   }
-  launch_type    = "EC2"
-  propagate_tags = "TASK_DEFINITION"
-  load_balancer {
-    target_group_arn = aws_lb_target_group.example_client_app.arn
-    container_name   = "product-api"
-    container_port   = 9090
-  }
+  launch_type            = "EC2"
+  propagate_tags         = "TASK_DEFINITION"
   enable_execute_command = true
 }
 
@@ -66,7 +62,7 @@ module "product_api" {
   version                            = "0.2.0-beta2"
   tags                               = merge(local.tags, { Service = "product-api" })
   requires_compatibilities           = ["EC2"]
-  family                             = "${var.name}-product-api"
+  family                             = local.product_api_name
   port                               = "9090"
   log_configuration                  = local.product_log_config
   additional_execution_role_policies = [aws_iam_policy.database.arn]
@@ -77,7 +73,7 @@ module "product_api" {
     logConfiguration = local.product_log_config
     environment = [{
       name  = "NAME"
-      value = "${var.name}-product-api"
+      value = local.product_api_name
     }]
     secrets = [{
       name      = "DB_CONNECTION"
