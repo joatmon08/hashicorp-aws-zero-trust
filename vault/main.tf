@@ -14,7 +14,7 @@ terraform {
 provider "hcp" {}
 
 provider "vault" {
-  address   = local.vault_address
+  address   = local.vault_addr
   namespace = local.vault_namespace
   token     = local.vault_token
 }
