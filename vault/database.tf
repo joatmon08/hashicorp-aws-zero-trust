@@ -13,13 +13,14 @@ resource "vault_database_secret_backend_connection" "postgres" {
   }
 }
 
-resource "vault_database_secret_backend_static_role" "postgres" {
-  backend             = vault_mount.postgres.path
-  name                = "product"
-  db_name             = vault_database_secret_backend_connection.postgres.name
-  username            = "product"
-  rotation_period     = "604800"
-  rotation_statements = ["ALTER USER \"{{name}}\" WITH PASSWORD '{{password}}';"]
+resource "vault_database_secret_backend_role" "product" {
+  backend               = vault_mount.postgres.path
+  name                  = "product"
+  db_name               = vault_database_secret_backend_connection.postgres.name
+  creation_statements   = ["CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT SELECT ON ALL TABLES IN SCHEMA public TO \"{{name}}\";"]
+  revocation_statements = ["ALTER ROLE \"{{name}}\" NOLOGIN;"]
+  default_ttl           = 604800
+  max_ttl               = 604800
 }
 
 data "vault_policy_document" "product" {
