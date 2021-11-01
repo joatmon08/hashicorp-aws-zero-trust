@@ -1,14 +1,3 @@
-data "terraform_remote_state" "hcp" {
-  backend = "remote"
-
-  config = {
-    organization = "hashicorp-aws-zero-trust"
-    workspaces = {
-      name = "hcp"
-    }
-  }
-}
-
 data "terraform_remote_state" "infrastructure" {
   backend = "remote"
 
