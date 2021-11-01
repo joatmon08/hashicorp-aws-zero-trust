@@ -18,3 +18,7 @@ resource "hcp_vault_cluster" "vault" {
   hvn_id          = hcp_hvn.hvn.hvn_id
   public_endpoint = true
 }
+
+resource "hcp_vault_cluster_admin_token" "cluster" {
+  cluster_id = hcp_vault_cluster.vault.cluster_id
+}

@@ -52,3 +52,9 @@ output "hcp_vault_public_endpoint" {
   description = "Public endpoint of HCP Vault"
   sensitive   = true
 }
+
+output "hcp_vault_admin_token" {
+  value       = hcp_vault_cluster_admin_token.cluster.token
+  description = "Token of HCP Vault"
+  sensitive   = true
+}
