@@ -11,13 +11,11 @@ terraform {
   }
 }
 
+provider "hcp" {}
+
 
 data "hcp_vault_cluster" "cluster" {
   cluster_id = data.terraform_remote_state.hcp.outputs.hcp_vault_id
 }
-
-
-
-provider "hcp" {}
 
 provider "vault" {}
