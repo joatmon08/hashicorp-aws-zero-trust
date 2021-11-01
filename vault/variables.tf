@@ -20,19 +20,7 @@ data "terraform_remote_state" "infrastructure" {
   }
 }
 
-data "hcp_vault_cluster" "cluster" {
-  cluster_id = local.vault_cluster_id
-}
-
-resource "hcp_vault_cluster_admin_token" "cluster" {
-  cluster_id = local.vault_cluster_id
-}
-
 locals {
-  vault_cluster_id  = data.terraform_remote_state.hcp.outputs.hcp_vault_id
-  vault_addr        = data.hcp_vault_cluster.cluster.vault_public_endpoint_url
-  vault_namespace   = data.hcp_vault_cluster.cluster.namespace
-  vault_token       = hcp_vault_cluster_admin_token.cluster.token
   postgres_username = data.terraform_remote_state.infrastructure.outputs.product_database_username
   postgres_password = data.terraform_remote_state.infrastructure.outputs.product_database_password
   postgres_hostname = data.terraform_remote_state.infrastructure.outputs.product_database_address

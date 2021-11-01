@@ -11,10 +11,13 @@ terraform {
   }
 }
 
+
+data "hcp_vault_cluster" "cluster" {
+  cluster_id = data.terraform_remote_state.hcp.outputs.hcp_vault_id
+}
+
+
+
 provider "hcp" {}
 
-provider "vault" {
-  address   = local.vault_addr
-  namespace = local.vault_namespace
-  token     = local.vault_token
-}
+provider "vault" {}
