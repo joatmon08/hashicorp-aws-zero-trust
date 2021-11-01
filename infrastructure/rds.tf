@@ -4,11 +4,11 @@ resource "aws_security_group" "database" {
   vpc_id      = module.vpc.vpc_id
 
   ingress {
-    description     = "Allow inbound from ECS"
+    description     = "Allow inbound from ECS and Boundary worker"
     from_port       = 5432
     to_port         = 5432
     protocol        = "tcp"
-    security_groups = [aws_security_group.ecs.id]
+    security_groups = [aws_security_group.ecs.id, module.boundary.boundary_security_group]
   }
 
   ingress {
