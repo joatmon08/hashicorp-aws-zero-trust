@@ -22,11 +22,15 @@ resource "vault_policy" "boundary" {
 }
 
 resource "vault_token" "boundary" {
-  role_name = "boundary"
+  role_name = vault_token_auth_backend_role.boundary.role_name
+  policies  = [vault_policy.boundary.name]
+  ttl       = "24h"
+}
 
-  policies = [vault_policy.boundary.name]
-
-  renewable = true
-  ttl       = "1d"
-  num_uses  = 25
+resource "vault_token_auth_backend_role" "boundary" {
+  role_name           = "boundary"
+  allowed_policies    = [vault_policy.boundary.name]
+  disallowed_policies = ["default"]
+  orphan              = true
+  renewable           = true
 }
