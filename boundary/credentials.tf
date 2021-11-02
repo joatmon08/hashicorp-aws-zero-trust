@@ -2,7 +2,7 @@ resource "boundary_credential_store_vault" "hcp" {
   name        = "hcp"
   description = "HCP Vault credentials store"
   address     = local.vault_address
-  token       = local.vault_boundary_token
+  token       = data.terraform_remote_state.vault.outputs.boundary_token
   scope_id    = boundary_scope.products_infra.id
   namespace   = local.vault_namespace
 }
