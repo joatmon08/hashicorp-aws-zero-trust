@@ -63,3 +63,9 @@ output "hcp_vault_admin_token" {
   description = "Token of HCP Vault"
   sensitive   = true
 }
+
+output "vault_aws_role_arns" {
+  value       = [aws_iam_role.terraform.arn]
+  description = "AWS Role ARNs to add to Vault AWS secrets engine"
+  sensitive   = true
+}

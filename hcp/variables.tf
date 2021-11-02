@@ -18,3 +18,9 @@ variable "hcp_network_cidr_block" {
   description = "HCP CIDR Block for HashiCorp Virtual Network"
   default     = "172.25.16.0/20"
 }
+
+variable "trusted_role_arn" {
+  type        = string
+  description = "Role ARN for Vault's AWS Secrets Engine"
+  sensitive   = true
+}
