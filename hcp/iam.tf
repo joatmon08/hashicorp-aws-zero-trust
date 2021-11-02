@@ -31,15 +31,15 @@ resource "aws_iam_role" "terraform" {
       Version = "2012-10-17"
       Statement = [
         {
-          Action   = ["kms:Encrypt*"]
+          Action   = ["kms:*"]
           Effect   = "Allow"
           Resource = "*"
         },
         {
           Action = [
-            "iam:*RolePolicy",
-            "iam:*Role",
-            "iam:*Policy",
+            "iam:*Role*",
+            "iam:*Policy*",
+            "iam:*InstanceProfile",
           ]
           Effect   = "Allow"
           Resource = "*"
