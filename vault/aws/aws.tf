@@ -15,7 +15,7 @@ resource "vault_aws_secret_backend_role" "role" {
 
 data "vault_policy_document" "aws" {
   rule {
-    path         = "${vault_aws_secret_backend.aws.path}/creds/terraform"
+    path         = "${vault_aws_secret_backend.aws.path}/creds/${var.name}"
     capabilities = ["read"]
     description  = "read AWS credentials for Terraform to use"
   }
