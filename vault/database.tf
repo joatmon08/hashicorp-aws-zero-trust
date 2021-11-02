@@ -57,6 +57,12 @@ data "vault_policy_document" "boundary" {
     capabilities = ["read"]
     description  = "read all credentials for product database as boundary"
   }
+
+  rule {
+    path         = "auth/token/lookup-self"
+    capabilities = ["read"]
+    description  = "lookup token"
+  }
 }
 
 resource "vault_policy" "boundary" {
