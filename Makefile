@@ -20,6 +20,10 @@ vault-db:
 	vault read hashicups/database/creds/boundary -format=json > secrets/boundary.json
 	vault read hashicups/database/creds/product -format=json > secrets/product.json
 
+vault-aws:
+	mkdir -p secrets/
+	vault read terraform/aws/creds/hashicups -format=json > secrets/aws.json
+
 postgres-products: boundary-auth-dev
 	@PGPASSWORD=$(shell cat secrets/product.json | jq -r .data.password) \
 		boundary connect postgres -username=$(shell cat secrets/product.json | jq -r .data.username) \
