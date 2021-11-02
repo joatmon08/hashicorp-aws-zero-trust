@@ -14,11 +14,6 @@ variable "name" {
   description = "Name for ECS task and service"
 }
 
-variable "purpose" {
-  type        = string
-  description = "Purpose for ECS task and service"
-}
-
 variable "client_cidr_block" {
   type        = string
   description = "Client CIDR blocks to allow access to EC2 instances"
@@ -38,8 +33,7 @@ variable "db_password" {
 locals {
 
   tags = {
-    Name    = var.name,
-    Purpose = var.purpose,
+    Name = var.name
   }
   ecs_cluster_name   = data.terraform_remote_state.infrastructure.outputs.ecs_cluster
   ecs_security_group = data.terraform_remote_state.infrastructure.outputs.ecs_security_group

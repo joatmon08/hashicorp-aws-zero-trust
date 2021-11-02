@@ -9,6 +9,7 @@ resource "consul_config_entry" "product_api_intentions" {
         Name       = "${var.name}-public-api"
         Precedence = 9
         Type       = "consul"
+        Namespace  = "default"
       }
     ]
   })
@@ -25,6 +26,7 @@ resource "consul_config_entry" "public_api_intentions" {
         Name       = "${var.name}-frontend"
         Precedence = 9
         Type       = "consul"
+        Namespace  = "default"
       }
     ]
   })

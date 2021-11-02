@@ -13,11 +13,6 @@ variable "name" {
   description = "Name for infrastructure resources"
 }
 
-variable "purpose" {
-  type        = string
-  description = "Purpose for infrastructure resources"
-}
-
 variable "additional_tags" {
   type        = map(string)
   description = "Additional tags to add to infrastructure resources"
@@ -77,8 +72,7 @@ data "terraform_remote_state" "hcp" {
 
 locals {
   tags = merge({
-    Name    = var.name,
-    Purpose = var.purpose,
+    Name = var.name
   }, var.additional_tags)
   region         = data.terraform_remote_state.hcp.outputs.region
   hvn_id         = data.terraform_remote_state.hcp.outputs.hcp_network_id
