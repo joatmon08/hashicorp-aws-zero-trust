@@ -41,6 +41,11 @@ output "hcp_vault_id" {
   description = "ID of HCP Vault"
 }
 
+output "hcp_vault_namespace" {
+  value       = hcp_vault_cluster.vault.namespace
+  description = "Namespace of HCP Vault"
+}
+
 output "hcp_vault_private_endpoint" {
   value       = hcp_vault_cluster.vault.vault_private_endpoint_url
   description = "Private endpoint of HCP Vault"
