@@ -24,3 +24,9 @@ variable "trusted_role_arn" {
   description = "Role ARN for Vault's AWS Secrets Engine"
   sensitive   = true
 }
+
+variable "sts_duration" {
+  type        = number
+  description = "Default duration in seconds for session token"
+  default     = 14400
+}

@@ -69,3 +69,8 @@ output "vault_aws_role_arns" {
   description = "AWS Role ARNs to add to Vault AWS secrets engine"
   sensitive   = true
 }
+
+output "sts_duration" {
+  value       = var.sts_duration
+  description = "AWS STS token duration in seconds"
+}

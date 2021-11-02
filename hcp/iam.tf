@@ -10,9 +10,10 @@ data "aws_iam_policy_document" "vault" {
 }
 
 resource "aws_iam_role" "terraform" {
-  name               = "${var.name}-terraform"
-  path               = "/"
-  assume_role_policy = data.aws_iam_policy_document.vault.json
+  name                 = "${var.name}-terraform"
+  path                 = "/"
+  max_session_duration = var.sts_duration
+  assume_role_policy   = data.aws_iam_policy_document.vault.json
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/AmazonRDSFullAccess",
     "arn:aws:iam::aws:policy/AmazonECS_FullAccess",
