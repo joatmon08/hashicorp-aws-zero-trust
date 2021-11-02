@@ -9,8 +9,8 @@ resource "vault_aws_secret_backend_role" "role" {
   name            = var.name
   credential_type = "assumed_role"
   role_arns       = local.aws_role_arns
-  default_sts_ttl = 3600
-  max_sts_ttl     = 7200
+  default_sts_ttl = local.aws_sts_duration
+  max_sts_ttl     = 43200
 }
 
 data "vault_policy_document" "aws" {

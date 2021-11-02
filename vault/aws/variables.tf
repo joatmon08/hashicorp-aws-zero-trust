@@ -26,5 +26,6 @@ data "terraform_remote_state" "hcp" {
 }
 
 locals {
-  aws_role_arns = data.terraform_remote_state.hcp.outputs.vault_aws_role_arns
+  aws_role_arns    = data.terraform_remote_state.hcp.outputs.vault_aws_role_arns
+  aws_sts_duration = data.terraform_remote_state.hcp.outputs.sts_duration
 }
