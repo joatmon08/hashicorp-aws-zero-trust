@@ -26,9 +26,13 @@ data "terraform_remote_state" "vault" {
   config = {
     organization = "hashicorp-aws-zero-trust"
     workspaces = {
-      name = "vault"
+      name = "vault-products"
     }
   }
+}
+
+variable "name" {
+  type = string
 }
 
 variable "operations_team" {
