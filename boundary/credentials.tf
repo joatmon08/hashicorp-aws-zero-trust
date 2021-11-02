@@ -4,7 +4,7 @@ resource "boundary_credential_store_vault" "hcp" {
   address     = local.vault_address
   token       = data.terraform_remote_state.vault.outputs.boundary_token
   scope_id    = boundary_scope.products_infra.id
-  namespace   = local.vault_namespace
+  namespace   = "admin"
 }
 
 resource "boundary_credential_library_vault" "database" {
