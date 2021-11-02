@@ -23,4 +23,27 @@ resource "aws_iam_role" "terraform" {
     "arn:aws:iam::aws:policy/SecretsManagerReadWrite",
     "arn:aws:iam::aws:policy/IAMReadOnlyAccess"
   ]
+  inline_policy {
+    name = "HashiCupsPolicy"
+
+    policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Action   = ["kms:Encrypt*"]
+          Effect   = "Allow"
+          Resource = "*"
+        },
+        {
+          Action = [
+            "iam:*RolePolicy",
+            "iam:*Role",
+            "iam:*Policy",
+          ]
+          Effect   = "Allow"
+          Resource = "*"
+        }
+      ]
+    })
+  }
 }
