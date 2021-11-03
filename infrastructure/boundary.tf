@@ -1,6 +1,6 @@
 module "boundary" {
   depends_on                   = [module.vpc]
-  source                       = "github.com/joatmon08/terraform-aws-boundary"
+  source                       = "github.com/joatmon08/terraform-aws-boundary?ref=test"
   vpc_id                       = module.vpc.vpc_id
   vpc_cidr_block               = module.vpc.vpc_cidr_block
   public_subnet_ids            = module.vpc.public_subnets

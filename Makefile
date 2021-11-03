@@ -38,4 +38,5 @@ configure-db: boundary-auth-dev
 
 clean:
 	vault lease revoke -f -prefix hashicups/database/creds
+	vault lease revoke -f -prefix terraform/aws/creds
 	rm -rf secrets/
