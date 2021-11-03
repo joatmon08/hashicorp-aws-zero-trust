@@ -24,6 +24,11 @@ output "hcp_consul_id" {
   description = "ID of HCP Consul"
 }
 
+output "hcp_consul_datacenter" {
+  value       = hcp_consul_cluster.consul.datacenter
+  description = "Datacenter of HCP Consul"
+}
+
 output "hcp_consul_private_endpoint" {
   value       = hcp_consul_cluster.consul.consul_private_endpoint_url
   description = "Private endpoint of HCP Consul"
