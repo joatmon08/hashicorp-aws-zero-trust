@@ -36,6 +36,12 @@ output "hcp_consul_public_endpoint" {
   sensitive   = true
 }
 
+output "hcp_consul_root_token" {
+  value       = hcp_consul_cluster_root_token.cluster.secret_id
+  description = "Token of HCP Consul"
+  sensitive   = true
+}
+
 output "hcp_vault_id" {
   value       = hcp_vault_cluster.vault.cluster_id
   description = "ID of HCP Vault"
