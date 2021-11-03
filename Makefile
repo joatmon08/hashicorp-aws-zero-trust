@@ -17,7 +17,6 @@ ssh-ecs: boundary-auth-ops
 
 vault-db:
 	mkdir -p secrets/
-	vault read hashicups/database/creds/boundary -format=json > secrets/boundary.json
 	vault read hashicups/database/creds/product -format=json > secrets/product.json
 
 vault-aws:
@@ -25,16 +24,20 @@ vault-aws:
 	vault read terraform/aws/creds/hashicups -format=json > secrets/aws.json
 
 postgres-products: boundary-auth-dev
-	@PGPASSWORD=$(shell cat secrets/product.json | jq -r .data.password) \
-		boundary connect postgres -username=$(shell cat secrets/product.json | jq -r .data.username) \
-		-addr $(shell cd infrastructure && terraform output -raw boundary_endpoint) \
-		-target-id $(shell cd boundary && terraform output -raw boundary_target_postgres) -- -d products
+	boundary targets authorize-session \
+		-id $(shell cd boundary && terraform output -raw boundary_target_postgres) \
+		-format json > secrets/boundary.json
+	boundary connect postgres \
+		-target-id $(shell cd boundary && terraform output -raw boundary_target_postgres) \
+		-dbname products
 
 configure-db: boundary-auth-dev
-	@PGPASSWORD=$(shell cat secrets/boundary.json | jq -r .data.password) \
-		boundary connect postgres -username=$(shell cat secrets/boundary.json | jq -r .data.username) \
-		-addr $(shell cd infrastructure && terraform output -raw boundary_endpoint) \
-		-target-id $(shell cd boundary && terraform output -raw boundary_target_postgres) -- -d products -f database/products.sql
+	boundary targets authorize-session \
+		-id $(shell cd boundary && terraform output -raw boundary_target_postgres) \
+		-format json > secrets/boundary.json
+	boundary connect postgres \
+		-target-id $(shell cd boundary && terraform output -raw boundary_target_postgres) \
+		-dbname products -- -f database/products.sql
 
 clean:
 	vault lease revoke -f -prefix hashicups/database/creds
