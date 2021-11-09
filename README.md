@@ -21,9 +21,9 @@ and remote workspace sharing.
 | Workspace Name | Working Directory for VCS | Variables | Remote State Sharing |
 | ----------- | ----------- | ----------- | ----------- |
 | hcp      | `hcp/` | name, trusted_role_arn, bootstrap AWS access keys, HCP credentials | infrastructure, consul, boundary, vault-aws |
-| vault-aws      | `vault/aws/` | name, AWS access keys (for AWS secrets engine), HCP Vault address/token/namespace |  |
+| vault-aws      | `vault/aws/` | name, AWS access keys (for AWS secrets engine) |  |
 | infrastructure      | `infrastructure/` | name, client_cidr_block, HCP service principal credentials, database_password, boundary_database_password, key_pair_name. [FROM VAULT] AWS access keys | boundary, apps, vault-products |
-| vault-products | `vault/products/` | name, HCP service principal credentials, HCP Vault address/token/namespace | boundary |
+| vault-products | `vault/products/` | name, HCP service principal credentials | boundary |
 | boundary      | `boundary/` | name. [FROM VAULT] db_password, db_username, AWS access keys | |
 | consul      | `consul/` | name | |
 | apps      | `apps/` | name, client_cidr_block. [FROM VAULT] db_password, db_username, AWS access keys | |
