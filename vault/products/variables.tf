@@ -9,6 +9,17 @@ data "terraform_remote_state" "infrastructure" {
   }
 }
 
+data "terraform_remote_state" "hcp" {
+  backend = "remote"
+
+  config = {
+    organization = "hashicorp-aws-zero-trust"
+    workspaces = {
+      name = "hcp"
+    }
+  }
+}
+
 locals {
   postgres_username = data.terraform_remote_state.infrastructure.outputs.product_database_username
   postgres_password = data.terraform_remote_state.infrastructure.outputs.product_database_password
