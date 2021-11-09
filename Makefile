@@ -1,13 +1,13 @@
 boundary-auth-ops:
-	boundary authenticate password -login-name=jeff \
+	@boundary authenticate password -login-name=jeff \
 		-addr $(shell cd infrastructure && terraform output -raw boundary_endpoint) \
-		-password ${BOUNDARY_OPS_PASSWORD} \
+		-password $(shell cd boundary && terraform output -raw boundary_operations_password) \
 		-auth-method-id=$(shell cd boundary && terraform output -raw boundary_auth_method_id)
 
 boundary-auth-dev:
-	boundary authenticate password -login-name=rosemary \
+	@boundary authenticate password -login-name=rosemary \
 		-addr $(shell cd infrastructure && terraform output -raw boundary_endpoint) \
-		-password ${BOUNDARY_DEV_PASSWORD} \
+		-password $(shell cd boundary && terraform output -raw boundary_products_password) \
 		-auth-method-id=$(shell cd boundary && terraform output -raw boundary_auth_method_id)
 
 ssh-ecs: boundary-auth-ops

@@ -6,5 +6,3 @@ export CONSUL_HTTP_ADDR=$(cd hcp && terraform output -raw hcp_consul_public_endp
 export CONSUL_HTTP_TOKEN=$(cd hcp && terraform output -raw hcp_consul_root_token)
 
 export BOUNDARY_ADDR=$(cd infrastructure && terraform output -raw boundary_endpoint)
-export BOUNDARY_OPS_PASSWORD=$(cd boundary && terraform output -raw boundary_operations_password)
-export BOUNDARY_DEV_PASSWORD=$(cd boundary && terraform output -raw boundary_products_password)
