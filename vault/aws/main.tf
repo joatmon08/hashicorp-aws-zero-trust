@@ -1,6 +1,6 @@
 terraform {
   required_providers {
-    consul = {
+    vault = {
       source  = "hashicorp/vault"
       version = "~> 2.24"
     }
