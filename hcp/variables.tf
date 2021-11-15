@@ -3,6 +3,15 @@ variable "name" {
   description = "Name for infrastructure resources"
 }
 
+variable "default_tags" {
+  type        = map(string)
+  description = "Default tags to add to infrastructure resources"
+  default = {
+    Service = "hashicups"
+    Purpose = "aws-reinvent-2021"
+  }
+}
+
 variable "hcp_region" {
   type        = string
   description = "AWS Region"
