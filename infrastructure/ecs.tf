@@ -97,8 +97,6 @@ resource "aws_ecs_cluster" "cluster" {
       }
     }
   }
-
-  tags = local.tags
 }
 
 data "aws_ami" "amazon_linux_ecs" {
@@ -156,4 +154,6 @@ module "asg" {
       propagate_at_launch = true
     }
   ]
+
+  tags_as_map = var.default_tags
 }

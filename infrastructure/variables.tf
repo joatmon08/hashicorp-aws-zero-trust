@@ -13,10 +13,13 @@ variable "name" {
   description = "Name for infrastructure resources"
 }
 
-variable "additional_tags" {
+variable "default_tags" {
   type        = map(string)
-  description = "Additional tags to add to infrastructure resources"
-  default     = {}
+  description = "Default tags to add to infrastructure resources"
+  default = {
+    Service = "hashicups"
+    Purpose = "aws-reinvent-2021"
+  }
 }
 
 variable "vpc_cidr_block" {
@@ -71,9 +74,6 @@ data "terraform_remote_state" "hcp" {
 }
 
 locals {
-  tags = merge({
-    Name = var.name
-  }, var.additional_tags)
   region         = data.terraform_remote_state.hcp.outputs.region
   hvn_id         = data.terraform_remote_state.hcp.outputs.hcp_network_id
   hvn_self_link  = data.terraform_remote_state.hcp.outputs.hcp_network_self_link

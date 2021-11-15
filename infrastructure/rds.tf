@@ -39,7 +39,8 @@ resource "aws_db_instance" "products" {
   db_subnet_group_name   = module.vpc.database_subnet_group_name
   vpc_security_group_ids = [aws_security_group.database.id]
   skip_final_snapshot    = true
-  tags = merge(local.tags, {
+  tags = {
+    Service   = "hashicups"
     Component = "products-db"
-  })
+  }
 }
