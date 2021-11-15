@@ -25,7 +25,6 @@ and remote workspace sharing.
 | infrastructure      | `infrastructure/` | name, client_cidr_block, HCP service principal credentials, database_password, boundary_database_password, key_pair_name. [FROM VAULT] AWS access keys | boundary, apps, vault-products |
 | vault-products | `vault/products/` | name, HCP service principal credentials | boundary |
 | boundary      | `boundary/` | name. [FROM VAULT] db_password, db_username, AWS access keys | |
-| consul      | `consul/` | name | |
 | apps      | `apps/` | name, client_cidr_block. [FROM VAULT] db_password, db_username, AWS access keys | |
 
 You need to run plan and apply for each workspace in the order indicated.
@@ -45,13 +44,16 @@ for Terraform to configure infrastructure on AWS.
     - HCP Consul cluster
     - AWS IAM Role for Terraform
 
-1. Run `set.sh`. This sets the Vault address, token, and namespace for you to get
-   a new set of AWS access keys from Vault.
+1. Sets the Vault address, token, and namespace for you to get
+   a new set of AWS access keys from Vault in your CLI.
+   ```shell
+   source set.sh
+   ```
 
 1. Next, generate a set of AWS access keys for the Vault secrets engine. These should be
    different than the ones you used to bootstrap HCP and the AWS IAM role!
 
-1. Add the new AWS access keys to `vault-aws`.
+1. Add the new AWS access keys to `vault-aws` workspace.
 
 1. Run `terraform apply` for the `vault-aws` workspace. It creates:
     - Path for AWS secrets engine in Vault at `terraform/aws`
@@ -59,6 +61,9 @@ for Terraform to configure infrastructure on AWS.
 
 1. Run `make vault-aws`. This retrieves a new set of AWS access keys from Vault via
    the secrets engine and saves it to the `secrets/` directory locally.
+   ```shell
+   make vault-aws
+   ```
 
 1. Use the AWS access and secret keys from `secrets/aws.json` and add them to the
    `infrastructure`, `boundary`, and `apps` workspaces.
@@ -89,11 +94,17 @@ Configure the following.
     - Role for the application that will access it (e.g., `product`)
     - Role for Boundary user to access it (e.g., `boundary`)
 
-1. Run `set.sh`. This sets the Vault address, token, and namespace for you to get
-   a new set of AWS access keys from Vault.
+1. Sets the Vault address, token, and namespace for you to get
+   a new set of AWS access keys from Vault in your CLI.
+   ```shell
+   source set.sh
+   ```
 
 1. Run `make vault-db`. This retrieves a new set of database credentials from Vault via
    the secrets engine and saves it to the `secrets/` directory locally.
+   ```shell
+   make vault-db
+   ```
 
 1. Use the AWS access and secret keys from `secrets/product.json` and add them to the
    `apps` workspace. This allows the `product-api` to reference the database.
@@ -133,9 +144,5 @@ registered to Consul. You can use intentions to secure service-to-service commun
 
 1. Try to access the frontend via the ALB. You might get an error! We need to enable
    traffic between the services registered to Consul.
-
-1. Run `terraform apply` for the `consul` workspace. It creates two intentions:
-    1. Allow traffic from `frontend` to `public`.
-    1. Allow `public` to `product`.
 
 1. Try to access the frontend via the ALB. You'll get a `Packer Spiced Latte`!
