@@ -8,6 +8,7 @@ locals {
     }
   }
   public_api_name = "${var.name}-public-api"
+  public_api_port = 8080
 }
 
 resource "aws_ecs_service" "public_api" {
@@ -27,10 +28,9 @@ resource "aws_ecs_service" "public_api" {
 module "public_api" {
   source                   = "hashicorp/consul-ecs/aws//modules/mesh-task"
   version                  = "0.2.0-beta2"
-  tags                     = merge(local.tags, { Service = "public-api" })
   requires_compatibilities = ["FARGATE"]
   family                   = local.public_api_name
-  port                     = "8080"
+  port                     = local.public_api_port
   log_configuration        = local.public_log_config
   container_definitions = [{
     name             = "public-api"
@@ -42,15 +42,15 @@ module "public_api" {
       value = local.public_api_name
       }, {
       name  = "BIND_ADDRESS"
-      value = ":8080"
+      value = ":${local.public_api_port}"
       }, {
       name  = "PRODUCT_API_URI"
-      value = "http://localhost:9090"
+      value = "http://localhost:${local.product_api_port}"
     }]
     portMappings = [
       {
-        containerPort = 8080
-        hostPort      = 8080
+        containerPort = local.public_api_port
+        hostPort      = local.public_api_port
         protocol      = "tcp"
       }
     ]
@@ -61,7 +61,7 @@ module "public_api" {
   upstreams = [
     {
       destination_name = local.product_api_name
-      local_bind_port  = 9090
+      local_bind_port  = local.product_api_port
     }
   ]
   retry_join                     = local.consul_attributes.consul_retry_join

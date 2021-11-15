@@ -8,6 +8,7 @@ locals {
     }
   }
   frontend_name = "${var.name}-frontend"
+  frontend_port = 80
 }
 
 resource "aws_ecs_service" "frontend" {
@@ -24,7 +25,7 @@ resource "aws_ecs_service" "frontend" {
   load_balancer {
     target_group_arn = aws_lb_target_group.frontend.arn
     container_name   = "frontend"
-    container_port   = 80
+    container_port   = local.frontend_port
   }
   enable_execute_command = true
 }
@@ -32,10 +33,9 @@ resource "aws_ecs_service" "frontend" {
 module "frontend" {
   source                   = "hashicorp/consul-ecs/aws//modules/mesh-task"
   version                  = "0.2.0-beta2"
-  tags                     = merge(local.tags, { Service = "frontend" })
   requires_compatibilities = ["FARGATE"]
   family                   = local.frontend_name
-  port                     = "80"
+  port                     = local.frontend_port
   log_configuration        = local.frontend_log_config
   container_definitions = [{
     name             = "frontend"
@@ -48,8 +48,8 @@ module "frontend" {
     }]
     portMappings = [
       {
-        containerPort = 80
-        hostPort      = 80
+        containerPort = local.frontend_port
+        hostPort      = local.frontend_port
         protocol      = "tcp"
       }
     ]
@@ -60,7 +60,7 @@ module "frontend" {
   upstreams = [
     {
       destination_name = local.public_api_name
-      local_bind_port  = 8080
+      local_bind_port  = local.public_api_port
     }
   ]
   retry_join                     = local.consul_attributes.consul_retry_join

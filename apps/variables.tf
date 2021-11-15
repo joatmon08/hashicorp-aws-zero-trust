@@ -9,6 +9,17 @@ data "terraform_remote_state" "infrastructure" {
   }
 }
 
+data "terraform_remote_state" "hcp" {
+  backend = "remote"
+
+  config = {
+    organization = "hashicorp-aws-zero-trust"
+    workspaces = {
+      name = "hcp"
+    }
+  }
+}
+
 variable "name" {
   type        = string
   description = "Name for ECS task and service"
@@ -30,11 +41,20 @@ variable "db_password" {
   sensitive   = true
 }
 
-locals {
-
-  tags = {
-    Name = var.name
+variable "default_tags" {
+  type        = map(string)
+  description = "Default tags to add to infrastructure resources"
+  default = {
+    Service = "hashicups"
+    Purpose = "aws-reinvent-2021"
   }
+}
+
+locals {
+  consul_cluster_id  = data.terraform_remote_state.hcp.outputs.hcp_consul_id
+  consul_addr        = data.terraform_remote_state.hcp.outputs.hcp_consul_public_endpoint
+  consul_datacenter  = data.terraform_remote_state.hcp.outputs.hcp_consul_datacenter
+  consul_token       = data.terraform_remote_state.hcp.outputs.hcp_consul_root_token
   ecs_cluster_name   = data.terraform_remote_state.infrastructure.outputs.ecs_cluster
   ecs_security_group = data.terraform_remote_state.infrastructure.outputs.ecs_security_group
   region             = data.terraform_remote_state.infrastructure.outputs.region
