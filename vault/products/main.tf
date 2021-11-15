@@ -4,6 +4,17 @@ terraform {
       source  = "hashicorp/vault"
       version = "~> 2.24"
     }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.65"
+    }
+  }
+}
+
+provider "aws" {
+  region = local.region
+  default_tags {
+    tags = var.default_tags
   }
 }
 
