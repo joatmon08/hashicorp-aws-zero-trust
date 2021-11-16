@@ -99,8 +99,12 @@ module "product_api" {
           value = var.name
         },
         {
-          name  = "CONFIG_FILE_TEMPLATE"
-          value = base64encode(file("templates/conf.json"))
+          name = "CONFIG_FILE_TEMPLATE"
+          value = base64encode(templatefile("templates/conf.json", {
+            vault_database_creds_path = local.vault_database_creds_path,
+            database_address          = local.db_address,
+            products_api_port         = local.product_api_port
+          }))
         },
         {
           name  = "CONFIG_FILE_NAME"

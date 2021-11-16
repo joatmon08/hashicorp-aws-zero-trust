@@ -8,3 +8,8 @@ output "boundary_database_credentials_path" {
   value       = local.boundary_creds_path
   description = "Credentials path for Boundary"
 }
+
+output "products_database_credentials_path" {
+  value       = local.products_creds_path
+  description = "Credentials path for Products API"
+}

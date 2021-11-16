@@ -20,6 +20,17 @@ data "terraform_remote_state" "hcp" {
   }
 }
 
+data "terraform_remote_state" "vault_products" {
+  backend = "remote"
+
+  config = {
+    organization = "hashicorp-aws-zero-trust"
+    workspaces = {
+      name = "vault-products"
+    }
+  }
+}
+
 variable "name" {
   type        = string
   description = "Name for ECS task and service"
@@ -67,4 +78,5 @@ locals {
   db_password                 = var.db_password
   hcp_vault_private_endnpoint = data.terraform_remote_state.hcp.outputs.hcp_vault_private_endpoint
   hcp_vault_namespace         = data.terraform_remote_state.hcp.outputs.hcp_vault_namespace
+  vault_database_creds_path   = data.terraform_remote_state.vault_products.outputs.products_database_credentials_path
 }
