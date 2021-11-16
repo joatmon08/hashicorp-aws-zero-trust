@@ -11,16 +11,6 @@ locals {
   product_api_port = 9090
 }
 
-resource "aws_secretsmanager_secret" "database" {
-  name                    = "${var.name}-products-database"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "database" {
-  secret_id     = aws_secretsmanager_secret.database.id
-  secret_string = "host=${local.db_address} port=5432 user=${local.db_username} password=${local.db_password} dbname=products sslmode=disable"
-}
-
 resource "aws_iam_policy" "vault" {
   name        = "${var.name}-product-vault"
   path        = "/ecs/"

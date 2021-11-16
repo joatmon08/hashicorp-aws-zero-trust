@@ -8,13 +8,13 @@ vault-aws:
 	@read -n1
 	vault list sys/leases/lookup/terraform/aws/creds/hashicups
 
-vault-db:
-	@mkdir -p secrets/
-	vault read hashicups/database/creds/product -format=json > secrets/product.json
-	@read -n1
-	cat secrets/product.json | jq .data.username
-	@read -n1
+vault-leases:
 	vault list sys/leases/lookup/hashicups/database/creds/product
+	@read -n1
+	vault list sys/leases/lookup/hashicups/database/creds/boundary
+
+products:
+	cd apps && terraform taint aws_ecs_service.product_api
 
 boundary-auth-ops:
 	@echo 'boundary authenticate password -login-name=jeff -password REDACTED -auth-method-id=$(AUTH_METHOD_ID)'

@@ -94,21 +94,6 @@ Configure the following.
     - Role for the application that will access it (e.g., `product`)
     - Role for Boundary user to access it (e.g., `boundary`)
 
-1. Sets the Vault address, token, and namespace for you to get
-   a new set of AWS access keys from Vault in your CLI.
-   ```shell
-   source set.sh
-   ```
-
-1. Run `make vault-db`. This retrieves a new set of database credentials from Vault via
-   the secrets engine and saves it to the `secrets/` directory locally.
-   ```shell
-   make vault-db
-   ```
-
-1. Use the AWS access and secret keys from `secrets/product.json` and add them to the
-   `apps` workspace. This allows the `product-api` to reference the database.
-
 ## Vault credentials brokering for Boundary
 
 Boundary needs a set of organizations and projects. You have two projects:
@@ -141,6 +126,13 @@ registered to Consul. You can use intentions to secure service-to-service commun
     1. `frontend` (Fargate launch type)
     1. `public-api` (Fargate launch type)
     1. `product-api` (EC2 launch type)
+
+1. Run `terraform apply` for the `vault-products` workspace. It adds:
+    - AWS IAM authentication method for ECS task to authenticate to vault
+
+1. Run `make products` to mark the `product-api` to be recreated.
+
+1. Run `terraform apply` for the `apps` workspace. It should redeploy the `product-api`.
 
 1. Try to access the frontend via the ALB. You might get an error! We need to enable
    traffic between the services registered to Consul.

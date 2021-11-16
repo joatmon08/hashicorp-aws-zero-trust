@@ -41,17 +41,6 @@ variable "client_cidr_block" {
   description = "Client CIDR blocks to allow access to EC2 instances"
 }
 
-variable "db_username" {
-  type        = string
-  description = "Database username for products information"
-}
-
-variable "db_password" {
-  type        = string
-  description = "Database password for products information"
-  sensitive   = true
-}
-
 variable "default_tags" {
   type        = map(string)
   description = "Default tags to add to infrastructure resources"
@@ -74,8 +63,6 @@ locals {
   private_subnets             = data.terraform_remote_state.infrastructure.outputs.private_subnets
   public_subnets              = data.terraform_remote_state.infrastructure.outputs.public_subnets
   db_address                  = data.terraform_remote_state.infrastructure.outputs.product_database_address
-  db_username                 = var.db_username
-  db_password                 = var.db_password
   hcp_vault_private_endnpoint = data.terraform_remote_state.hcp.outputs.hcp_vault_private_endpoint
   hcp_vault_namespace         = data.terraform_remote_state.hcp.outputs.hcp_vault_namespace
   vault_database_creds_path   = data.terraform_remote_state.vault_products.outputs.products_database_credentials_path
