@@ -65,7 +65,6 @@ module "product_api" {
   source                             = "github.com/hashicorp/terraform-aws-consul-ecs//modules/mesh-task"
   requires_compatibilities           = ["EC2"]
   family                             = local.product_api_name
-  consul_service_name                = local.product_api_name
   port                               = local.product_api_port
   log_configuration                  = local.product_log_config
   additional_execution_role_policies = [aws_iam_policy.vault.arn]
