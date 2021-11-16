@@ -47,19 +47,19 @@ resource "aws_iam_policy" "vault" {
 EOF
 }
 
-# resource "aws_ecs_service" "product_api" {
-#   name            = local.product_api_name
-#   cluster         = local.ecs_cluster_name
-#   task_definition = module.product_api.task_definition_arn
-#   desired_count   = 1
-#   network_configuration {
-#     subnets         = local.private_subnets
-#     security_groups = [local.ecs_security_group]
-#   }
-#   launch_type            = "EC2"
-#   propagate_tags         = "TASK_DEFINITION"
-#   enable_execute_command = true
-# }
+resource "aws_ecs_service" "product_api" {
+  name            = local.product_api_name
+  cluster         = local.ecs_cluster_name
+  task_definition = module.product_api.task_definition_arn
+  desired_count   = 1
+  network_configuration {
+    subnets         = local.private_subnets
+    security_groups = [local.ecs_security_group]
+  }
+  launch_type            = "EC2"
+  propagate_tags         = "TASK_DEFINITION"
+  enable_execute_command = true
+}
 
 module "product_api" {
   source                             = "github.com/hashicorp/terraform-aws-consul-ecs//modules/mesh-task"
