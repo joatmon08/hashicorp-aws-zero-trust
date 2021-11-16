@@ -60,7 +60,7 @@ resource "aws_ecs_service" "product_api" {
 
 module "product_api" {
   source                             = "hashicorp/consul-ecs/aws//modules/mesh-task"
-  version                            = "0.2.0-beta2"
+  version                            = "0.2.0"
   requires_compatibilities           = ["EC2"]
   family                             = local.product_api_name
   port                               = local.product_api_port
@@ -96,7 +96,7 @@ module "product_api" {
     mountPoints = []
     volumesFrom = []
   }]
-  retry_join                     = local.consul_attributes.consul_retry_join
+  retry_join                     = [local.consul_attributes.consul_retry_join]
   tls                            = true
   consul_server_ca_cert_arn      = local.consul_attributes.consul_server_ca_cert_arn
   gossip_key_secret_arn          = local.consul_attributes.gossip_key_secret_arn

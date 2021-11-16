@@ -32,7 +32,7 @@ resource "aws_ecs_service" "frontend" {
 
 module "frontend" {
   source                   = "hashicorp/consul-ecs/aws//modules/mesh-task"
-  version                  = "0.2.0-beta2"
+  version                  = "0.2.0"
   requires_compatibilities = ["FARGATE"]
   family                   = local.frontend_name
   port                     = local.frontend_port
@@ -63,7 +63,7 @@ module "frontend" {
       local_bind_port  = local.public_api_port
     }
   ]
-  retry_join                     = local.consul_attributes.consul_retry_join
+  retry_join                     = [local.consul_attributes.consul_retry_join]
   tls                            = true
   consul_server_ca_cert_arn      = local.consul_attributes.consul_server_ca_cert_arn
   gossip_key_secret_arn          = local.consul_attributes.gossip_key_secret_arn
