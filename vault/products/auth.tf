@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 data "aws_iam_roles" "ecs" {
-  name_regex  = "${var.name}-product-api-execution"
+  name_regex  = "${var.name}-product-api-task"
   path_prefix = "/ecs/"
 }
 
