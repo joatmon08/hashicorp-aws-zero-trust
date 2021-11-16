@@ -51,20 +51,18 @@ variable "default_tags" {
 }
 
 locals {
-  consul_cluster_id           = data.terraform_remote_state.hcp.outputs.hcp_consul_id
-  consul_addr                 = data.terraform_remote_state.hcp.outputs.hcp_consul_public_endpoint
-  consul_datacenter           = data.terraform_remote_state.hcp.outputs.hcp_consul_datacenter
-  consul_token                = data.terraform_remote_state.hcp.outputs.hcp_consul_root_token
-  ecs_cluster_name            = data.terraform_remote_state.infrastructure.outputs.ecs_cluster
-  ecs_security_group          = data.terraform_remote_state.infrastructure.outputs.ecs_security_group
-  region                      = data.terraform_remote_state.infrastructure.outputs.region
-  consul_attributes           = data.terraform_remote_state.infrastructure.outputs.consul_attributes
-  vpc_id                      = data.terraform_remote_state.infrastructure.outputs.vpc_id
-  private_subnets             = data.terraform_remote_state.infrastructure.outputs.private_subnets
-  public_subnets              = data.terraform_remote_state.infrastructure.outputs.public_subnets
-  db_address                  = data.terraform_remote_state.infrastructure.outputs.product_database_address
-  db_username                 = var.db_username
-  db_password                 = var.db_password
-  hcp_vault_private_endnpoint = data.terraform_remote_state.hcp.outputs.hcp_vault_private_endpoint
-  hcp_vault_namespace         = data.terraform_remote_state.hcp.outputs.hcp_vault_namespace
+  consul_cluster_id  = data.terraform_remote_state.hcp.outputs.hcp_consul_id
+  consul_addr        = data.terraform_remote_state.hcp.outputs.hcp_consul_public_endpoint
+  consul_datacenter  = data.terraform_remote_state.hcp.outputs.hcp_consul_datacenter
+  consul_token       = data.terraform_remote_state.hcp.outputs.hcp_consul_root_token
+  ecs_cluster_name   = data.terraform_remote_state.infrastructure.outputs.ecs_cluster
+  ecs_security_group = data.terraform_remote_state.infrastructure.outputs.ecs_security_group
+  region             = data.terraform_remote_state.infrastructure.outputs.region
+  consul_attributes  = data.terraform_remote_state.infrastructure.outputs.consul_attributes
+  vpc_id             = data.terraform_remote_state.infrastructure.outputs.vpc_id
+  private_subnets    = data.terraform_remote_state.infrastructure.outputs.private_subnets
+  public_subnets     = data.terraform_remote_state.infrastructure.outputs.public_subnets
+  db_address         = data.terraform_remote_state.infrastructure.outputs.product_database_address
+  db_username        = var.db_username
+  db_password        = var.db_password
 }
