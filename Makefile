@@ -49,6 +49,8 @@ postgres-products:
 
 configure-db: boundary-auth-dev
 	@read -n1
+	curl -s https://raw.githubusercontent.com/hashicorp-demoapp/product-api-go/v0.0.19/database/products.sql --output products.sql
+	@read -n1
 	boundary connect postgres \
 		-target-id $(shell cd boundary && terraform output -raw boundary_target_postgres) \
 		-dbname products -- -f database/products.sql
