@@ -16,6 +16,7 @@ resource "vault_aws_auth_backend_sts_role" "ecs" {
 }
 
 resource "vault_aws_auth_backend_role" "ecs" {
+  count                    = length(data.aws_iam_roles.ecs.arns) > 0 ? 1 : 0
   backend                  = vault_auth_backend.aws.path
   role                     = var.name
   auth_type                = "iam"
