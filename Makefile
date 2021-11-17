@@ -8,9 +8,15 @@ vault-aws:
 	@read -n1
 	vault list sys/leases/lookup/terraform/aws/creds/hashicups
 
-vault-leases:
-	vault list sys/leases/lookup/hashicups/database/creds/product
+vault-db:
+	@mkdir -p secrets/
+	vault read hashicups/database/creds/product -format=json > secrets/products.json
 	@read -n1
+	cat secrets/products.json | jq .data.username
+	@read -n1
+	vault list sys/leases/lookup/hashicups/database/creds/product
+
+vault-leases:
 	vault list sys/leases/lookup/hashicups/database/creds/boundary
 
 products:
@@ -26,7 +32,7 @@ boundary-auth-dev:
 	@echo 'boundary authenticate password -login-name=rosemary -password REDACTED -auth-method-id=$(AUTH_METHOD_ID)'
 	@boundary authenticate password -login-name=rosemary \
 		-password $(shell cd boundary && terraform output -raw boundary_products_password) \
-		-auth-method-id=$(shell cd boundary && terraform output -raw boundary_auth_method_id)
+		-auth-method-id=$(AUTH_METHOD_ID)
 
 ssh-ecs: boundary-auth-ops
 	@read -n1
@@ -38,7 +44,7 @@ postgres-creds:
 		-id $(shell cd boundary && terraform output -raw boundary_target_postgres) \
 		-format json > secrets/boundary.json
 	@read -n1
-	cat secrets/boundary.json | jq .data.username
+	cat secrets/boundary.json | jq '.item.credentials[0].secret.decoded.username'
 	@read -n1
 	vault list sys/leases/lookup/hashicups/database/creds/boundary
 
@@ -47,13 +53,12 @@ postgres-products:
 		-target-id $(shell cd boundary && terraform output -raw boundary_target_postgres) \
 		-dbname products
 
-configure-db: boundary-auth-dev
-	@read -n1
+configure-db:
 	curl -s https://raw.githubusercontent.com/hashicorp-demoapp/product-api-go/v0.0.19/database/products.sql --output products.sql
 	@read -n1
 	boundary connect postgres \
 		-target-id $(shell cd boundary && terraform output -raw boundary_target_postgres) \
-		-dbname products -- -f database/products.sql
+		-dbname products -- -f products.sql
 
 clean:
 	vault lease revoke -f -prefix hashicups/database/creds
