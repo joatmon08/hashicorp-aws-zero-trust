@@ -28,3 +28,7 @@ output "boundary_target_postgres" {
 output "boundary_endpoint" {
   value = local.url
 }
+
+output "boundary_products_scope_id" {
+  value = boundary_scope.products_infra.id
+}
