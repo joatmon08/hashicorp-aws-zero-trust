@@ -8,6 +8,12 @@ vault-aws:
 	@read -n1
 	vault list sys/leases/lookup/terraform/aws/creds/hashicups
 
+vault-boundary-host-catalog:
+	@mkdir -p secrets/
+	vault read boundary/aws/creds/ecs -format=json > secrets/boundary_host.json
+	@read -n1
+	cat secrets/boundary_host.json | jq .data.access_key
+
 vault-db:
 	@mkdir -p secrets/
 	vault read hashicups/database/creds/product -format=json > secrets/products.json
@@ -42,9 +48,9 @@ ssh-ecs: boundary-auth-ops
 postgres-creds:
 	boundary targets authorize-session \
 		-id $(shell cd boundary && terraform output -raw boundary_target_postgres) \
-		-format json > secrets/boundary.json
+		-format json > secrets/boundary_db.json
 	@read -n1
-	cat secrets/boundary.json | jq '.item.credentials[0].secret.decoded.username'
+	cat secrets/boundary_db.json | jq '.item.credentials[0].secret.decoded.username'
 	@read -n1
 	vault list sys/leases/lookup/hashicups/database/creds/boundary
 
@@ -63,4 +69,5 @@ configure-db:
 clean:
 	vault lease revoke -f -prefix hashicups/database/creds
 	vault lease revoke -f -prefix terraform/aws/creds
+	vault lease revoke -f -prefix boundary/aws/creds/ecs
 	rm -rf secrets/
