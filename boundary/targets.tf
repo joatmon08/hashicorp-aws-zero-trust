@@ -6,7 +6,7 @@ resource "boundary_target" "ecs" {
   session_connection_limit = -1
   default_port             = 22
   host_source_ids = [
-    boundary_host_set.ecs_nodes.id
+    # boundary_host_set.ecs_nodes.id
   ]
 }
 

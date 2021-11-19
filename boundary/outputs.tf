@@ -29,6 +29,6 @@ output "boundary_endpoint" {
   value = local.url
 }
 
-output "boundary_products_scope_id" {
-  value = boundary_scope.products_infra.id
+output "core_infra_scope_id" {
+  value = boundary_scope.core_infra.id
 }
