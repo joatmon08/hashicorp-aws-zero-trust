@@ -40,6 +40,21 @@ boundary-auth-dev:
 		-password $(shell cd boundary && terraform output -raw boundary_products_password) \
 		-auth-method-id=$(AUTH_METHOD_ID)
 
+boundary-host-catalog: vault-boundary-host-catalog boundary-auth-ops
+	@read -n1
+	boundary host-catalogs create plugin -format=json \
+		-name="ecs-nodes" -plugin-name="aws" \
+		-scope-id=$(shell cd boundary && terraform output -raw core_infra_scope_id) \
+		-attr="disable_credential_rotation=true" \
+		-attr="region=$(shell  cd hcp && terraform  output  -raw  region)" \
+		-secret="access_key_id=$(shell cat secrets/boundary_host.json | jq -r .data.access_key)" \
+		-secret="secret_access_key=$(shell cat secrets/boundary_host.json | jq -r .data.secret_key)" > secrets/host_catalog_config.json
+	@read -n1
+	boundary host-sets create plugin -format=json \
+		-name="ecs-nodes" \
+		-host-catalog-id=$(shell cat secrets/host_catalog_config.json | jq -r '.item.id') \
+		-attributes='{"filters":["Name=tag:Cluster","Values=$(shell cd infrastructure && terraform output -raw ecs_cluster)"]}'
+
 ssh-ecs: boundary-auth-ops
 	@read -n1
 	boundary connect ssh -username=ec2-user \
