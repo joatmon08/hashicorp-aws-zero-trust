@@ -74,10 +74,12 @@ for Terraform to configure infrastructure on AWS.
     - Boundary cluster (1 worker, 1 controller, database)
     - Amazon ECS cluster (1 EC2 container instance)
 
-## Database secrets engine for Vault
+## Secrets for the Products API
 
-Since we use ECS, we are not dynamically injecting the database credentials to the application
-(although you can)!
+We need to generate a few things for the products API (and Boundary).
+
+- Database secrets engine for HashiCups data (used by `product-api` and Boundary)
+- AWS IAM Auth Method for `vault-agent` in HashiCups `product-api`
 
 To configure this, you need to add HCP service credentials with the Vault address, token, and
 namespace to `vault-products`.
@@ -85,7 +87,7 @@ namespace to `vault-products`.
 You have two identities that need to access the application's database:
 
 1. Application (`product-api`) to __read from__ the database
-1. Human user (`ops` or `dev` team) to __update__ the database
+1. Human user (`ops` or `dev` team) to __update__ the database using Boundary
 
 Configure the following.
 
@@ -93,8 +95,7 @@ Configure the following.
     - Path for database credentials in Vault at `hashicups/database`
     - Role for the application that will access it (e.g., `product`)
     - Role for Boundary user to access it (e.g., `boundary`)
-
-## Vault credentials brokering for Boundary
+## Configuring Boundary
 
 Boundary needs a set of organizations and projects. You have two projects:
 
@@ -108,14 +109,24 @@ Configure the following.
     - Three users, `jeff` for the `ops` team, `rosemary` for the `dev` team,
       and `taylor` for the `security` team.
     - Two targets:
-        - ECS container instance
+        - ECS container instance (not yet added)
         - Application database, brokered by Vault credentials
+
+### Dynamic Host Catalog
+
+1. Run `source set.sh` to set your Boundary address.
+
+1. Run `make boundary-host-catalog` to configure the host catalog for the ECS container instances.
+   This uses dynamic host catalog plugins in Boundary to auto-discover AWS EC2 instances with the cluster
+   tag.
+
+1. You can also SSH into the ECS container instance as the `ops` team. Run `make ssh-ecs`.
+
+### Vault Credentials Brokering
 
 1. Boundary uses Vault as a credentials store to retrieve a new set of database credentials!
    Run `make configure-db` to log into Boundary as the `dev` team and configure the database -
    all without knowing the username or password!
-
-1. You can also SSH into the ECS container instance as the `ops` team. Run `make ssh-ecs`.
 
 ## Consul intentions
 
