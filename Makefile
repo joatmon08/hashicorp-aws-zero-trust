@@ -72,7 +72,10 @@ configure-db:
 		-target-id $(shell cd boundary && terraform output -raw boundary_target_postgres) \
 		-dbname products -- -f products.sql
 
-clean:
+clean-leases:
+	vault lease revoke -f -prefix boundary/aws/creds/ecs
 	vault lease revoke -f -prefix hashicups/database/creds
+
+clean:
 	vault lease revoke -f -prefix terraform/aws/creds
 	rm -rf secrets/

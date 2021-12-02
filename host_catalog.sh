@@ -14,7 +14,7 @@ AWS_ACCESS_KEY_ID=$(cat secrets/boundary_host.json | jq -r .data.access_key)
 AWS_SECRET_ACCESS_KEY=$(cat secrets/boundary_host.json | jq -r .data.secret_key)
 ECS_CLUSTER=$(cd infrastructure && terraform output -raw ecs_cluster)
 
-echo 'boundary host-catalogs create plugin -format=json -plugin-name="aws" -scope-id='$(cd boundary && terraform output -raw core_infra_scope_id)' -attr="disable_credential_rotation=true" -attr="region=$(cd hcp && terraform output -raw region)" -secret="access_key_id=${AWS_ACCESS_KEY_ID}" -secret="secret_access_key=${AWS_SECRET_ACCESS_KEY}" > secrets/host_catalog_config.json'
+echo 'boundary host-catalogs create plugin -format=json -plugin-name="aws" -scope-id='$(cd boundary && terraform output -raw core_infra_scope_id)' -attr="disable_credential_rotation=true" -attr="region='$(cd hcp && terraform output -raw region)'" -secret="access_key_id=${AWS_ACCESS_KEY_ID}" -secret="secret_access_key=${AWS_SECRET_ACCESS_KEY}" > secrets/host_catalog_config.json'
 boundary host-catalogs create plugin -format=json \
   -plugin-name="aws" \
   -scope-id=$(cd boundary && terraform output -raw core_infra_scope_id) \
@@ -24,7 +24,7 @@ boundary host-catalogs create plugin -format=json \
   -secret="secret_access_key=${AWS_SECRET_ACCESS_KEY}" > secrets/host_catalog_config.json
 read -n1
 
-echo "boundary host-sets create plugin -format=json -name='ecs-nodes' -host-catalog-id=$(cat secrets/host_catalog_config.json | jq -r '.item.id') --attributes='{"filters": ["tag:Cluster=${ECS_CLUSTER}"]}' > secrets/host_set_config.json"
+echo "boundary host-sets create plugin -format=json -name='ecs-nodes' -host-catalog-id=$(cat secrets/host_catalog_config.json | jq -r '.item.id') --attributes='{\"filters\": [\"tag:Cluster=${ECS_CLUSTER}\"]}' > secrets/host_set_config.json"
 boundary host-sets create plugin -format=json \
   -name="ecs-nodes" \
   -host-catalog-id=$(cat secrets/host_catalog_config.json | jq -r '.item.id') \
